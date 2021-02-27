@@ -1,0 +1,115 @@
+<!doctype html>
+{% load bootstrap4 %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>EBM - Company</title>
+    {% bootstrap_css %}
+    {% bootstrap_javascript jquery='full' %}
+    <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+ <style>
+    nav{
+      background-color: white ;
+    }
+    .navbar {
+              font-family: 'Times New Roman', Times, serif;
+}
+.one-edge-shadow {
+              font-family:'Times New Roman', Times, serif;
+              font-size: 17;
+}
+.display-8{
+  font-weight: 200;
+  font-size: 30px;
+}
+footer {
+  position:  center;
+  color:            black;
+  text-align:       center;
+  padding:          15px;
+  margin: 0px 10px 10px 10px;
+  font-size:        90%;
+}
+
+  </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-light bg-white mb-4 border">
+        <a class="navbar-brand" href="{% url 'e_shop:home'%}">Home
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'e_shop:blog'%}">Blog</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'e_shop:contact'%}">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'e_shop:about' %}">About</a>
+                </li>
+                 {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link">Hello, {{ user.username }}</a>
+                </li>
+                {% endif %}
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'e_shop:cart' %}">Cart
+                    <span class="badge badge-info">{{request.session.cart.keys|length}}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'e_shop:orders' %}">Orders</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'users:change_password' %}">Change Password</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'users:logout' %}">Logout</a>
+                </li>
+
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'e_shop:cart' %}">Cart
+                    <span class="badge badge-info">{{request.session.cart.keys|length}}</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'users:register' %}">Signup</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'users:login' %}">Login</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <main role="main">
+        <div>
+            {% block page_header %}{% endblock page_header %}
+        </div>
+        <div>
+            {% block content %}{% endblock content %}
+        </div>
+    </main>
+<footer>
+  <nav class="one-edge-shadow navbar-light bg-white">
+      Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved. |
+    To contact us <a class="btn-sm btn-outline-info border rounded" href="{% url 'e_shop:contact' %}" target="_blank" role="button">Click here &raquo;</a>
+      <br>
+      All trademarks appearing on this site are the property of EBM Company. EBM Company offers a wide range of products
+      feel free to shop with us.
+  </nav>
+    </footer>
+</body>
+</html>

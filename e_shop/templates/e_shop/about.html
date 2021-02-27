@@ -1,0 +1,20 @@
+<title>About | EBM - Company</title>
+{% extends 'e_shop/base.html' %}
+
+{% block content %}
+
+<div class="p-1 m-2">
+    <div class="col-lg-7 mt-2 mb-4 mx-auto pt-4">
+        <div class="card mb-3">
+            <h5 class="card-header">
+                <a href="">{{setting.company_name}}</a>
+            </h5>
+            <div class="card-body">
+                <p>{{ setting.director_statement|safe}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

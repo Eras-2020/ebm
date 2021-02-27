@@ -1,0 +1,31 @@
+<title>Comments | EBM - Company</title>
+{% extends "e_shop/base.html" %}
+{% load bootstrap4 %}
+{% block content %}
+
+<div class="p-1 m-2">
+    <div class="col-lg-8 mt-1 mb-4 mx-auto">
+        <div class="card mb-3">
+            <h5 class="card-header">
+                <a href="/blog_details/{{topic.id}}">{{topic}}</a></h5>
+            <div class="card-body">
+            <form action="{% url 'e_shop:comment' topic.id %}" method="post" class="form">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                {% buttons %}
+                <button name="submit" class="btn btn-primary">Submit</button>
+                {% endbuttons %}
+            </form>
+            {% for comment in comments %}
+            <p>
+                On {{comment.created_on|date:"M d, Y H:i" }}
+                <b>{{ comment.name }}</b> wrote:
+            </p>
+            <p>{{ comment.comment }}</p>
+            <hr>
+            {% endfor %}
+                </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

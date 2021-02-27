@@ -1,0 +1,111 @@
+<title>Details | EBM - Company</title>
+{% extends 'e_shop/base.html' %}
+{% load custom_filter %}
+{% load humanize %}
+{% load cart %}
+{% block content %}
+
+
+<div class="container mt-4 p-4">
+    <div class="row">
+        <div class="col-5">
+            <img id="mainImage" src="{{product.image.url}}" class="img-fluid rounded border"/>
+            <hr/>
+            <div class="row">
+                {% for image in images %}
+                <div class="col">
+                    <img onclick="changeImage(event)" class="img-thumbnail" src="{{image.image_add.url}}"/></div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-7">
+            <p><b>Name :</b> {{product.name}}</p>
+            <hr/>
+            {% if product.brand %}
+            <p>
+                <b>Brand : </b>{{ product.brand}}
+            </p>
+            <hr/>
+            {% endif %}
+            <p>
+                {% if product.description %}
+                <b>Details : </b>
+                <br>
+                {{ product.description|safe}}
+                {% endif %}
+            </p>
+            {% if product.size %}
+             <hr/>
+            <p><b>Size: </b>{{product.size}}</p>
+            {% endif %}
+            {% if product.color %}
+            <p><b>Color: </b>{{product.color}}</p>
+            {% endif %}
+            <hr/>
+            <p><strong>Availability:</strong> {% if product.in_stock %} In Stock{% else %} Out of Stock {% endif %}</p>
+            <hr/>
+            {% if product.discount %}
+            <p class="text-danger p-0 m-0">Save: {{product.discount}} % </p>
+            <hr/>
+            <h5>
+                <del>{{ product.price|floatformat:2|intcomma|currency}}</del> &nbsp; Price: {{product|sale_price|floatformat:2|intcomma|currency}}
+            </h5>
+            {% else %}
+            <h5>
+                Price: {{ product|sale_price|floatformat:2|intcomma|currency}}
+            </h5>
+            {% endif %}
+            <br>
+            <div class="card-footer p-0 no-gutters">
+                {% if product|is_in_cart:request.session.cart %}
+                <div class="row no-gutters">
+                    <form action="{% url 'e_shop:product_details' product.id %}" class="col-2" method="post">
+                        {% csrf_token %}
+                        <input hidden type="text" name="product" value="{{product.id}}">
+                        <input hidden type="text" name="remove" value="True">
+                        <input type="submit" value="-" class="btn btn-block btn-secondary">
+                    </form>
+                    <div class="text-center col">{{product|cart_quantity:request.session.cart}} in Cart</div>
+                    <form action="{% url 'e_shop:product_details' product.id %}" class="col-2" method="post">
+                        {% csrf_token %}
+                        <input hidden type="text" name="product" value="{{product.id}}">
+                        <input type="submit" value="+" class="btn btn-block btn-secondary">
+                    </form>
+                </div>
+                {% else %}
+                {% if product.in_stock %}
+                <form action="{% url 'e_shop:product_details' product.id %}" method="Post" class="btn-block">
+                    {% csrf_token %}
+                    <input hidden type="text" name="product" value="{{product.id}}">
+                    <input type="submit" class="float-right btn btn-light border form-control" value="Add to Cart">
+                </form>
+
+                {% else %}
+                <p class="float-right btn btn-light border form-control">Out of stock</p>
+                {% endif %}
+                {% endif %}
+            </div>
+            <div class="">
+                <br/>
+                <a href="/cart" class="btn btn-outline-info border rounded  col-lg-3 float-right">Go to cart</a>
+                <a href="/" class="btn btn-outline-info border rounded  col-lg-3 float-left">Continue Shopping</a>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script>
+function init(){
+}
+function changeImage(event){
+    var mainImage  = document.getElementById('mainImage')
+    mainImage.src= event.target.src
+}
+window.onload = init;
+
+
+</script>
+
+{% endblock %}

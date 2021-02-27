@@ -1,0 +1,51 @@
+<title>Orders | EBM - Company</title>
+{% extends 'e_shop/base.html' %}
+{% block content %}
+{% load cart %}
+{% load humanize %}
+{% load custom_filter %}
+<div class="container">
+   <div class="border rounded p-4 m-4">
+        <p class="display-4 pl-4 ml-4">Your Orders</p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>S/N</th>
+                    <th>Image</th>
+                    <th>Product</th>
+                    <th>Date</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                {% for order in orders %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td><img style="height: 80px;" class="rounded-circle" src="{{order.product.image.url}}" alt=""></td>
+                    <td>{{order.product.name}}</td>
+                    <td>{{order.order_date}}</td>
+                    <td>{{order.product|sale_price|floatformat:2|intcomma|currency}}</td>
+                    <td>{{order.quantity}}</td>
+                    <td>{{order.product|multiply:order.quantity|floatformat:2|intcomma|currency}}</td>
+                    {% if order.status %}
+                    <td><small class="badge badge-success">Completed</small></td>
+                    {% else %}
+                    <td><small class="badge badge-info">Pending</small></td>
+                    {% endif %}
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+        </table>
+       <div class="m-3 p-3">
+           <a href="/" class="btn btn-outline-info border rounded  col-lg-3 float-left">Continue Shopping</a>
+       </div>
+   </div>
+</div>
+
+{% endblock %}

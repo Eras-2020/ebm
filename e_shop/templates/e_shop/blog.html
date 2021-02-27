@@ -1,0 +1,32 @@
+<title>Blog | EBM - Company</title>
+{% extends 'e_shop/base.html' %}
+
+{% block content %}
+
+<div class="p-1 m-2">
+    <div class="col-lg-8 mt-2 mb-4 mx-auto pt-4">
+        {% for blog in blogs %}
+        <div class="card mb-3">
+            <h5 class="card-header">
+                <a href="blog_details/{{blog.id}}">{{blog.title}}</a>
+                <small>
+                    - Published on: {{ blog.created_on|date:'M d, Y H:i' }}&nbsp;
+                    Category:&nbsp;
+                {{blog.blog_category}}
+                </small>
+            </h5>
+            <div class="card-body">
+                <p>{{ blog.description|slice:1500|safe}} <a href="blog_details/{{blog.id}}">...</a></p>
+            </div>
+            <h5 class="card-header">
+                <small>
+                    Modified on: {{ blog.last_modified|date:'M d, Y H:i' }}&nbsp;
+                </small>
+            </h5>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+

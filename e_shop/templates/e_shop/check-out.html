@@ -1,0 +1,114 @@
+<title>Checkout | EBM - Company</title>
+{% extends 'e_shop/base.html' %}
+{% block content %}
+{% load cart %}
+{% load humanize %}
+{% load custom_filter %}
+<div class="container col-lg-5">
+    <div class="border rounded p-4 m-4">
+        {% if user.is_authenticated %}
+        {% if products|total_cart_price:request.session.cart > 0 %}
+        <h6> Payment Form</h6>
+        <form action="/check-out" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <hr/>
+                <label>Delivery Address*</label>
+                <select required name="address" class="form-control" aria-describedby="helpId">
+                    <option value="" selected>---------------</option>
+                    <option value="Kitengela">Kitengela</option>
+                    <option value="AthiRiver">AthiRiver</option>
+                    <option value="Nairobi-CBD">Nairobi-CBD</option>
+                    <option value="Umoja">Umoja</option>
+                    <option value="Mwingi">Mwingi</option>
+                    <option value="Machakos">Machakos</option>
+                    <option value="Buruburu">Buruburu</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Phone Number*</label>
+                <input required type="text" pattern="[0-9]+" minlength="10" maxlength="20" name="phone"
+                       class="form-control" placeholder="0700000000" aria-describedby="helpId">
+            </div>
+            <div class="form-group">
+                <label>Payment Method*</label>
+                <select required name="payment_method" class="form-control" aria-describedby="helpId">
+                    <option value="" selected>---------------</option>
+                    <option value="MPesa">Mpesa</option>
+                    <option value="PayPal">PayPal</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Amount to Pay</label>
+                <input required type="text" name="amount"
+                       value="{{products|total_cart_price:request.session.cart|floatformat:2|intcomma}}" class="form-control"
+                       aria-describedby="helpId" disabled>
+            </div>
+            <hr/>
+            To pay with Mpesa
+            <p>Mpesa number: 0717173500</p>
+            <hr/>
+            To pay with PayPal, Credit or Debit Card
+            <div id="paypal-button-container"></div>
+
+            <!-- Include the PayPal JavaScript SDK -->
+            <script src="https://www.paypal.com/sdk/js?client-id=AfvCaWN6k3wSno0jy16fM2sjtDwFMZioweYzIVWsK_amBEkIOERk93k7fBM45-1nwemkMQWZy1hr4ZGu&currency=USD"></script>
+
+            <script>
+                      var Total = "{{products|total_cart_price_dollar:request.session.cart}}"
+                        // Render the PayPal button into #paypal-button-container
+                        paypal.Buttons({
+                          style:{
+                            color: "blue",
+                            shape: "rect",
+                          },
+
+                            // Set up the transaction
+                            createOrder: function(data, actions) {
+                                return actions.order.create({
+                                    purchase_units: [{
+                                        amount: {
+                                            value: parseFloat(Total).toFixed(2)
+                                        }
+                                    }]
+                                });
+                            },
+
+                            // Finalize the transaction
+                            onApprove: function(data, actions) {
+                                return actions.order.capture().then(function(details) {
+                                    // Show a success message to the buyer
+                                    alert('Transaction completed by ' + details.payer.name.given_name + '!');
+                                });
+                            }
+
+
+                        }).render('#paypal-button-container');
+
+
+
+            </script>
+            <div class="form-group">
+                <input type="submit" class="btn float-left btn-outline-info col-lg-6" value="Submit Order">
+            </div>
+        </form>
+        {% else %}
+        <h5 class="pb-2 mb-2 border-bottom">
+           No items picked
+        </h5>
+        <p class="lead">You can only make payments for items picked</p>
+        <a href="/" class="btn btn-sm btn-primary">Shop Now</a>
+        {% endif %}
+        {% else %}
+         <h5 class="pb-2 mb-2 border-bottom">
+           You are not logged in
+        </h5>
+        <p class="lead">Only logged users can purchase items. Thank You.</p>
+        <a class="btn btn-md btn-primary" href="{% url 'users:login' %}" role="button">Login</a>
+        {% endif %}
+    </div>
+</div>
+
+
+{% endblock content %}

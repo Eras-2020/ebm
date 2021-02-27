@@ -1,0 +1,24 @@
+<title>Login | EBM - Company</title>
+{% extends 'e_shop/base.html' %}
+
+{% load bootstrap4 %}
+
+{% block content %}
+<div class="container">
+    <h5 class="pb-2 mb-2 border-bottom">Login into your account.</h5>
+
+    <form method="post" action="{% url 'users:login' %}" class="form">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+        <button name="submit" class="btn btn-sm btn-primary">Login</button>
+        {% endbuttons %}
+        <input type="hidden", name="next" value="{% url 'e_shop:home' %}">
+    </form>
+    <p>
+     <a class="btn btn-sm btn-primary float-left" href="{% url 'users:password_reset' %}">Reset Password</a>
+    </p>
+</br>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,43 @@
+<title>Blog | EBM - Company</title>
+{% extends 'e_shop/base.html' %}
+{% block content %}
+
+<div class="p-1 m-2">
+    <div class="col-lg-8 mt-2 mb-4 mx-auto pt-4">
+        <div class="card mb-3">
+            <h5 class="card-header">
+                <a href="">{{blog.title}}</a>
+                <small>
+                    - Published on: {{ blog.created_on|date:'M d, Y H:i' }}&nbsp;
+                    Category:&nbsp;
+                {{blog.blog_category}}
+                </small>
+            </h5>
+            <div class="card-body">
+                <p>{{ blog.description|safe}}
+                 {% if blog.video %}
+                <video class="rounded" width="100%" height="100%" controls loop autoplay muted>
+                    <source src="{{ blog.video.url}}" type=video/ogg>
+                    <source src="{{ blog.video.url.mp4}}" type=video/mp4,>
+                </video>
+                {% endif %}
+                {% if blog.image %}
+                <img class="card-img-top" height="400px" src="{{blog.image.url}}" alt="">
+                {% endif %}
+            </div>
+            <h5 class="card-header">
+                {% if user.is_authenticated %}
+                <small>
+                    <a href="/comment/{{blog.id }}">Read comments/Leave a comment</a>&nbsp;
+                </small>
+                {% else %}
+                <small>
+                    <a href="{% url 'users:login' %}"> Login to Read comments/Leave a comment</a>
+                </small>
+                {% endif %}
+            </h5>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
